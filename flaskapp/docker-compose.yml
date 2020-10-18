@@ -61,6 +61,24 @@ services:
     networks:
       - frontend
 
+  appvue:
+    build:
+      context: front
+      dockerfile: Dockerfile
+    container_name: appvue
+    image: nginx:stable-alpine
+    restart: unless-stopped
+    environment:
+      APP_VUE_ROOT_API: "http://localhost:8181"
+    ports:
+      - "80:80"
+    volumes:
+      - appvuedata:/data/app
+    depends_on:
+      - flask
+    networks: 
+      - frontend
+
 networks:
   frontend:
     driver: bridge
@@ -73,4 +91,6 @@ volumes:
   appdata:
     driver: local
   nginxdata:
+    driver: local
+  appvuedata:
     driver: local
